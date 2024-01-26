@@ -16,11 +16,14 @@ return {
         config = function()
             require("fidget").setup()
             require("mason").setup()
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "rust_analyzer", "typos_lsp", "bashls", "java_language_server", "marksman", "taplo" },
+                ensure_installed = { "lua_ls", "rust_analyzer", "typos_lsp", "java_language_server", "marksman", "taplo" },
                 handlers = {
                     function (server_name) -- default handler (optional)
-                        require("lspconfig")[server_name].setup {}
+                        require("lspconfig")[server_name].setup {
+                            capabilities = capabilities
+                        }
                     end,
                 }
             })
@@ -45,6 +48,18 @@ return {
                     {
                         { name = "buffer" },
                     })
+            })
+
+            vim.diagnostic.config({
+                update_in_insert = true,
+                float = {
+                    focusable = false,
+                    style = "minimal",
+                    border = "rounded",
+                    source = "always",
+                    header = "",
+                    prefix = "",
+                },
             })
         end
     },
